@@ -158,6 +158,22 @@ body.locked header, body.locked main, body.locked footer {display:none}
   .fab{position:fixed;right:1rem;bottom:1rem;border-radius:999px;padding:.7rem .9rem;border:1px solid hsl(var(--line));background:linear-gradient(135deg,hsl(var(--brand)),hsl(var(--brand-2)));color:#fff;box-shadow:0 10px 24px hsl(210 40% 10% / .25);display:none}
   .fab.show{display:inline-flex}
 .legal-note{margin-top:.4rem;font-size:.9rem;color:hsl(var(--muted));letter-spacing:.2px}
+.search-trigger{display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .6rem; border:1px solid hsl(var(--line)); border-radius:999px; background:hsl(var(--hover)); cursor:pointer}
+.search-trigger svg{width:16px; height:16px}
+.search-overlay{position:fixed; inset:0; z-index:20000; display:none; align-items:flex-start; justify-content:center; background:linear-gradient(180deg, hsl(0 0% 0% / .25), hsl(0 0% 0% / .45)); backdrop-filter:blur(6px)}
+.search-overlay.open{display:flex}
+.search-card{margin-top:12vh; width:min(900px, 92vw); background:hsl(var(--card)); border:1px solid hsl(var(--line)); border-radius:16px; box-shadow:0 30px 80px hsl(210 40% 10% / .45)}
+.search-head{display:flex; align-items:center; gap:.6rem; padding:.75rem .9rem; border-bottom:1px solid hsl(var(--line))}
+.search-head input{flex:1; padding:.6rem .7rem; border-radius:10px; border:1px solid hsl(var(--line)); background:hsl(var(--hover)); color:hsl(var(--txt))}
+.search-close{padding:.45rem .6rem; border-radius:10px; border:1px solid hsl(var(--line)); background:hsl(var(--hover)); cursor:pointer}
+.search-list{max-height:50vh; overflow:auto; padding:.4rem}
+.search-item{display:flex; flex-direction:column; gap:.2rem; padding:.55rem .6rem; border-radius:10px; border:1px solid transparent; background:transparent; width:100%; text-align:left; cursor:pointer}
+.search-item:hover{background:hsl(var(--hover)); border-color:hsl(var(--line))}
+.search-title{font-weight:700}
+.search-snippet{font-size:.92rem; color:hsl(var(--muted))}
+.search-hint{display:flex; justify-content:flex-end; gap:1rem; padding:.6rem .8rem; color:hsl(var(--muted)); border-top:1px solid hsl(var(--line)); font-size:.9rem}
+.search-hit{animation:hitflash 1.6s ease-out}
+@keyframes hitflash{0%{background:hsl(52 100% 50% / .65)} 100%{background:transparent}}
 </style>
   <!-- ASSETS (GitHub):
        Lege die Dateien in den Ordner /assets deiner Repo.
@@ -207,7 +223,11 @@ body.locked header, body.locked main, body.locked footer {display:none}
       <a href="#standard">Standardabläufe</a>
       <a href="#abcde">ABCDE</a>
     </div><!-- reordered -->
-    <button class="theme-toggle" type="button" aria-label="Darstellung umschalten">
+    <button class="search-trigger" type="button" aria-label="Suchen (Strg/Cmd+K)">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  <span class="hide-sm">Suche</span>
+</button>
+<button class="theme-toggle" type="button" aria-label="Darstellung umschalten">
       <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <span>Theme</span>
@@ -540,6 +560,91 @@ body.locked header, body.locked main, body.locked footer {display:none}
       onScrollSpy();
     });
   })();
+</script>
+
+<!-- Such-Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-labelledby="search-title">
+  <div class="search-card">
+    <div class="search-head">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search-input" type="search" placeholder="Suche… (⌘/Ctrl + K)" aria-label="Suche" />
+      <button id="search-close" class="search-close" type="button" aria-label="Schließen">ESC</button>
+    </div>
+    <div id="search-results" class="search-list" role="listbox" aria-label="Suchergebnisse"></div>
+    <div class="search-hint">Enter: öffnen • ESC: schließen</div>
+  </div>
+</div>
+<script>
+(function(){
+  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function(){
+    var overlay = document.getElementById('search-overlay');
+    var input = document.getElementById('search-input');
+    var closeBtn = document.getElementById('search-close');
+    var trigger = document.querySelector('.search-trigger');
+    var list = document.getElementById('search-results');
+    var INDEX = [];
+
+    function buildIndex(){
+      INDEX = [];
+      document.querySelectorAll('main section[id]').forEach(function(sec){
+        var tEl = sec.querySelector('h2, h3');
+        var secTitle = (tEl ? tEl.textContent.trim() : sec.id);
+        sec.querySelectorAll('h3, h4, p, li').forEach(function(el){
+          var text = (el.textContent||'').replace(new RegExp('[\s\u00A0]+','g'),' ').trim();
+          if(text) INDEX.push({secTitle:secTitle, text:text, el:el});
+        });
+      });
+    }
+
+    function open(){ overlay.classList.add('open'); input.value=''; render([]); if(INDEX.length===0) buildIndex(); input.focus({preventScroll:true}); document.body.style.overflow='hidden'; }
+    function close(){ overlay.classList.remove('open'); list.innerHTML=''; document.body.style.overflow='auto'; }
+
+    if(trigger) trigger.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); open(); });
+    if(closeBtn) closeBtn.addEventListener('click', close);
+    if(overlay) overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+
+    document.addEventListener('keydown', function(e){
+      var tag = document.activeElement && document.activeElement.tagName;
+      var inField = tag==='INPUT' || tag==='TEXTAREA';
+      if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); open(); }
+      else if(e.key==='/' && !inField){ e.preventDefault(); open(); }
+      else if(e.key==='Escape' && overlay.classList.contains('open')){ e.preventDefault(); close(); }
+    });
+
+    function highlight(text,q){
+      var qi = text.toLowerCase().indexOf(q.toLowerCase());
+      if(qi<0) return text;
+      var start = Math.max(0, qi-35);
+      var end = Math.min(text.length, qi+q.length+45);
+      return (start>0?'…':'') + text.slice(start, qi) + '<mark>' + text.slice(qi, qi+q.length) + '</mark>' + text.slice(qi+q.length, end) + (end<text.length?'…':'');
+    }
+
+    function render(results){
+      list.innerHTML = results.length? '' : '<div class="search-hint" style="justify-content:center">Tippe, um zu suchen. ESC zum Schließen.</div>';
+      results.slice(0,24).forEach(function(r){
+        var btn = document.createElement('button');
+        btn.className='search-item';
+        btn.innerHTML = '<div class="search-title">'+ r.secTitle +'</div><div class="search-snippet">'+ r.snippet +'</div>';
+        btn.addEventListener('click', function(){
+          close();
+          r.el.scrollIntoView({behavior:'smooth', block:'center'});
+          r.el.classList.add('search-hit');
+          setTimeout(function(){ r.el.classList.remove('search-hit'); }, 1600);
+        });
+        list.appendChild(btn);
+      });
+    }
+
+    if(input) input.addEventListener('input', function(){
+      var q = input.value.trim();
+      if(!q){ render([]); return; }
+      var res = INDEX.filter(function(x){ return x.text.toLowerCase().includes(q.toLowerCase()); })
+                     .map(function(x){ return {secTitle:x.secTitle, snippet:highlight(x.text,q), el:x.el};});
+      render(res);
+    });
+  });
+})();
 </script>
 </body>
 </html>
