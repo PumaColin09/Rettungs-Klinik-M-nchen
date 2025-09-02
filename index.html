@@ -54,7 +54,7 @@ Disallow: /
   .card{background:hsl(var(--card)); border:1px solid hsl(var(--line)); border-radius:var(--radius); box-shadow:0 6px 16px hsl(210 20% 10% / .06); padding:clamp(1rem,2.3vw,1.6rem)}
 
   /* Header */
-  header{position:sticky; top:0; z-index:10; background:hsl(var(--card) / .92); backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid hsl(var(--line)); margin-bottom:.8rem}
+  header{position:relative; z-index:20; background:hsl(var(--card) / .92); backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid hsl(var(--line)); margin-top:var(--nav-h,64px); margin-bottom:.8rem}
   .header-inner{display:flex; column-gap:1.4rem; row-gap:1rem; align-items:flex-start; padding:1rem 1.25rem; flex-wrap:wrap}
   .brand{display:flex; align-items:center; gap:.75rem}
   .logo{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2))); box-shadow:inset 0 0 0 2px hsl(0 0% 100% / .5)}
@@ -62,7 +62,29 @@ Disallow: /
   .brand-headline{margin:0; font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight:800; letter-spacing:.2px}
   .subtitle{margin:.1rem 0 0; font-size:.96rem; color:hsl(var(--muted))}
 
-  nav{display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-top:.6rem; padding:.4rem .2rem .8rem}
+  header nav{display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-top:.6rem; padding:.4rem .2rem .8rem}
+.main-nav{position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:9999; background:transparent; border:0; pointer-events:auto}
+.nav-shell{display:flex; align-items:center; gap:.6rem; padding:.28rem .38rem; border-radius:999px; border:1px solid hsl(0 0% 100% / .45); background:linear-gradient(135deg, hsl(0 0% 100% / .55), hsl(0 0% 100% / .35)); backdrop-filter:saturate(160%) blur(16px); box-shadow:0 10px 30px hsl(210 30% 10% / .18), inset 0 1px 0 hsl(0 0% 100% / .5); position:relative; z-index:10000; pointer-events:auto}
+:root[data-theme="dark"] .nav-shell{border-color:hsl(0 0% 100% / .12); background:linear-gradient(135deg, hsl(210 20% 14% / .60), hsl(210 20% 14% / .45)); box-shadow:0 10px 30px hsl(210 40% 5% / .45), inset 0 1px 0 hsl(0 0% 100% / .06)}
+.nav-items{display:flex; gap:.2rem; align-items:center; padding:.08rem .18rem; overflow-x:auto; max-width:min(92vw, 1100px); pointer-events:auto}
+.main-nav a{padding:.34rem .7rem; border-radius:999px; text-decoration:none; color:hsl(var(--txt)); white-space:nowrap; cursor:pointer; pointer-events:auto}
+#nav-spacer{height:var(--nav-h,64px); pointer-events:none}
+.nav-shell{display:flex; align-items:center; gap:.6rem; padding:.28rem .38rem; border-radius:999px; border:1px solid hsl(0 0% 100% / .45); background:linear-gradient(135deg, hsl(0 0% 100% / .55), hsl(0 0% 100% / .35)); backdrop-filter:saturate(160%) blur(16px); box-shadow:0 10px 30px hsl(210 30% 10% / .18), inset 0 1px 0 hsl(0 0% 100% / .5); position:relative; pointer-events:auto}
+:root[data-theme="dark"] .nav-shell{border-color:hsl(0 0% 100% / .12); background:linear-gradient(135deg, hsl(210 20% 14% / .60), hsl(210 20% 14% / .45)); box-shadow:0 10px 30px hsl(210 40% 5% / .45), inset 0 1px 0 hsl(0 0% 100% / .06)}
+.nav-shell{display:flex; align-items:center; gap:.6rem; padding:.28rem .38rem; border-radius:999px; border:1px solid hsl(0 0% 100% / .45); background:linear-gradient(135deg, hsl(0 0% 100% / .55), hsl(0 0% 100% / .35)); backdrop-filter:saturate(160%) blur(16px); box-shadow:0 10px 30px hsl(210 30% 10% / .18), inset 0 1px 0 hsl(0 0% 100% / .5)}
+:root[data-theme="dark"] .nav-shell{border-color:hsl(0 0% 100% / .12); background:linear-gradient(135deg, hsl(210 20% 14% / .60), hsl(210 20% 14% / .45)); box-shadow:0 10px 30px hsl(210 40% 5% / .45), inset 0 1px 0 hsl(0 0% 100% / .06)}
+.nav-items{display:flex; gap:.2rem; align-items:center; padding:.08rem .18rem; overflow-x:auto; max-width:min(92vw, 1100px)}
+.main-nav{font-size:.95rem}
+.main-nav{font-size:.95rem}
+.main-nav a{padding:.34rem .7rem; border-radius:999px; text-decoration:none; color:hsl(var(--txt)); white-space:nowrap; cursor:pointer}
+.main-nav a:hover{background:hsl(var(--hover))}
+.main-nav a.active{background:linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2))); color:#fff; box-shadow:0 6px 16px hsl(210 30% 20% / .25)}
+.main-nav .theme-toggle{margin-left:.2rem; padding:.35rem .6rem}
+.nav-spacer{height:var(--nav-h,64px)}
+.main-nav .nav-inner{display:flex; gap:1rem; align-items:center; flex-wrap:wrap}
+.nav-spacer{height:var(--nav-h,64px)}
+.main-nav .nav-inner{display:flex; gap:1rem; align-items:center; flex-wrap:wrap}
+.main-nav.stuck{box-shadow:0 8px 18px hsl(210 30% 10% / .12)}
   nav a{color:hsl(var(--txt)); text-decoration:none; padding:.45rem .7rem; border-radius:999px}
   nav a:hover{background:hsl(var(--hover))}
 
@@ -73,7 +95,7 @@ Disallow: /
   :root[data-theme="dark"] .theme-toggle .moon{display:inline}
 
   main{padding-bottom:2rem}
-  section{scroll-margin-top:90px; margin: 1rem 0 2rem}
+  section{scroll-margin-top: calc(var(--nav-h,64px) + 16px); margin: 1rem 0 2rem}
   h2{margin:.2rem 0 0; font-size: clamp(1.2rem, 2.8vw, 1.6rem)}
   h3{margin:0 0 .8rem; font-size: clamp(1.05rem, 2.6vw, 1.3rem); display:flex; gap:.6rem; align-items:center}
   h4{margin:1rem 0 .45rem; font-size:1.05rem; color:hsl(var(--muted))}
@@ -170,20 +192,29 @@ body.locked header, body.locked main, body.locked footer {display:none}
         <div class="subtitle">Dienstordnung &amp; Abläufe – Mitarbeitende</div>
         <small style="color:hsl(var(--muted))">FiveM Midcore • Patientenankündigung ausschließlich über den <strong>Krankenhausmonitor</strong></small>
       </div>
-      <nav aria-label="Navigation">
-      <a href="#dienst">Dienstvorschriften</a>
+      
+    </div>
+  </header>
+
+<!-- Sticky Sub-Navigation (outside header to actually stick) -->
+<nav class="main-nav" aria-label="Sekundärnavigation">
+  <div class="nav-shell">
+    <div class="nav-items">
       <a href="#quick">Schnellüberblick</a>
+      <a href="#dienst">Dienstvorschriften</a>
       <a href="#freigaben">Freigaben je Rang</a>
       <a href="#notstand">Notstand</a>
       <a href="#standard">Standardabläufe</a>
       <a href="#abcde">ABCDE</a>
-      <button class="theme-toggle" type="button" aria-label="Darstellung umschalten">
-        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <span>Theme</span>
-      </button></nav>
-    </div>
-  </header>
+    </div><!-- reordered -->
+    <button class="theme-toggle" type="button" aria-label="Darstellung umschalten">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span>Theme</span>
+    </button>
+  </div>
+</nav>
+<div id="nav-spacer" class="nav-spacer" aria-hidden="true"></div>
 
   <main class="container">
     <!-- Intro / Hero -->
@@ -384,11 +415,11 @@ body.locked header, body.locked main, body.locked footer {display:none}
           </ul>
         </div>
         <div>
-          <details class="fold"><summary><h4>Häufige Fehler vermeiden</h4></summary><ul>
+          <details class="fold" open><summary><h4>Häufige Fehler vermeiden</h4></summary><ul>
             <li>Alle arbeiten an einer Person → <strong>klare Zuweisungen</strong> pro Patient:in.</li>
             <li>Fortbildungsgrenzen ignoriert → KP ohne Fortbildung gibt <em>kein</em> Epinephrin/Novalgin.</li>
             <li>Monitor wird nicht genutzt → <strong>laufend</strong> neue Ankündigungen/Bedarfe prüfen.</li>
-          </ul></details><details class="fold"><summary><h4>Merksatz</h4></summary><ul>
+          </ul></details><details class="fold" open><summary><h4>Merksatz</h4></summary><ul>
             <li><strong>Stabilisieren vor Spezialmaßnahmen</strong>: Flüssigkeit, Blutung, Schmerz – danach ärztliche Entscheidung.</li>
           </ul></details></div></div></section>
 
@@ -475,19 +506,38 @@ body.locked header, body.locked main, body.locked footer {display:none}
     window.addEventListener('DOMContentLoaded', ()=>{
       // Theme toggle
       const tbtn = document.querySelector('.theme-toggle');
-      if(tbtn){ tbtn.addEventListener('click', ()=>{ const next = root.getAttribute('data-theme')==='dark' ? 'light':'dark'; root.setAttribute('data-theme', next); localStorage.setItem(KEY_THEME, next); }); }
+      if(tbtn){ tbtn.addEventListener('click', (e)=>{ e.stopPropagation(); const next = root.getAttribute('data-theme')==='dark' ? 'light':'dark'; root.setAttribute('data-theme', next); localStorage.setItem(KEY_THEME, next); }); }
 
-      // Smooth scroll + active nav highlight
-      const links=[...document.querySelectorAll('nav a[href^="#"]')];
-      links.forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); const el=document.querySelector(a.getAttribute('href')); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }));
-      const io=new IntersectionObserver(es=>{ es.forEach(e=>{ const id='#'+e.target.id; const l=document.querySelector(`nav a[href="${id}"]`); if(l && e.isIntersecting){ links.forEach(x=>x.style.background=''); l.style.background='hsl(var(--hover))'; } }); },{rootMargin:'-45% 0px -50% 0px',threshold:.01});
-      document.querySelectorAll('main section').forEach(s=>io.observe(s));
+      // Smooth scroll & active highlighting
+      const navLinks = Array.from(document.querySelectorAll('nav.main-nav a[href^="#"]'));
+      navLinks.forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const el=document.querySelector(a.getAttribute('href')); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }));
 
-      // Back to top
-      const toTop = document.getElementById('toTop');
-      const onScroll = ()=>{ if(window.scrollY>600){ toTop.classList.add('show'); } else { toTop.classList.remove('show'); } };
-      window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
-      toTop && toTop.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+      const sections = navLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      function setActive(id){ navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === `#${id}`)); }
+      function onScrollSpy(){
+        const nav = document.querySelector('nav.main-nav');
+        const offset = (nav?.offsetHeight || 0) + 24;
+        const y = window.scrollY + offset;
+        let current = sections[0]?.id;
+        for(const sec of sections){ if(sec.offsetTop <= y) current = sec.id; }
+        if(current) setActive(current);
+      }
+      window.addEventListener('scroll', onScrollSpy, {passive:true});
+      window.addEventListener('resize', onScrollSpy);
+
+      // Fixed subnav: set spacer height to avoid layout shift
+      const nav = document.querySelector('nav.main-nav');
+      const spacer = document.getElementById('nav-spacer');
+      function setNavOffset(){
+        if(nav && spacer){
+          const h = nav.getBoundingClientRect().height + 12;
+          spacer.style.height = h + 'px';
+          document.documentElement.style.setProperty('--nav-h', h + 'px');
+        }
+      }
+      setNavOffset();
+      window.addEventListener('resize', setNavOffset);
+      onScrollSpy();
     });
   })();
 </script>
