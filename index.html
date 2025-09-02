@@ -1,1 +1,495 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<!-- Hinweis: Lege zusätzlich eine Datei /robots.txt in dein Repo mit folgendem Inhalt an:
+User-agent: *
+Disallow: /
+-->
+<title>Klinik RP – Dienstordnung & Abläufe (Mitarbeiterfassung)</title>
+<meta name="description" content="Klare, praxisnahe Regeln und Abläufe für alle Mitarbeitenden der Klinikabteilung (FiveM Midcore).">
+<style>
+  /* ——— Klinik-Design (Light + Dark via Switch) ——— */
+  :root{
+    /* Light */
+    --bg: 210 33% 98%;
+    --card: 0 0% 100%;
+    --txt: 217 33% 12%;
+    --muted: 215 16% 42%;
+    --line: 214 16% 86%;
+    --brand: 218 85% 45%;
+    --brand-2: 198 100% 42%;
+    --hover: 210 40% 96%;
+    --bg-grad1: 210 100% 93%;
+    --bg-grad2: 200 100% 94%;
+    --radius: 18px;
+  }
+  :root[data-theme="dark"]{
+    --bg: 222 28% 12%;
+    --card: 224 28% 17%;
+    --txt: 210 20% 96%;
+    --muted: 210 10% 70%;
+    --line: 222 14% 22%;
+    --brand: 218 85% 55%;
+    --brand-2: 198 100% 50%;
+    --hover: 210 15% 22%;
+    --bg-grad1: 215 30% 18%;
+    --bg-grad2: 225 30% 16%;
+  }
 
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;
+    color:hsl(var(--txt));
+    background:
+      radial-gradient(900px 450px at 85% -10%, hsl(var(--bg-grad1) / .9), transparent 60%),
+      radial-gradient(700px 400px at -10% 10%, hsl(var(--bg-grad2) / .9), transparent 60%),
+      hsl(var(--bg));
+  }
+  .container{max-width:1100px; margin:0 auto; padding: clamp(1rem,2.4vw,2rem)}
+  .card{background:hsl(var(--card)); border:1px solid hsl(var(--line)); border-radius:var(--radius); box-shadow:0 6px 16px hsl(210 20% 10% / .06); padding:clamp(1rem,2.3vw,1.6rem)}
+
+  /* Header */
+  header{position:sticky; top:0; z-index:10; background:hsl(var(--card) / .92); backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid hsl(var(--line)); margin-bottom:.8rem}
+  .header-inner{display:flex; column-gap:1.4rem; row-gap:1rem; align-items:flex-start; padding:1rem 1.25rem; flex-wrap:wrap}
+  .brand{display:flex; align-items:center; gap:.75rem}
+  .logo{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2))); box-shadow:inset 0 0 0 2px hsl(0 0% 100% / .5)}
+  .logo img{width:38px; height:38px; object-fit:contain; border-radius:50%; background:white}
+  .brand-headline{margin:0; font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight:800; letter-spacing:.2px}
+  .subtitle{margin:.1rem 0 0; font-size:.96rem; color:hsl(var(--muted))}
+
+  nav{display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-top:.6rem; padding:.4rem .2rem .8rem}
+  nav a{color:hsl(var(--txt)); text-decoration:none; padding:.45rem .7rem; border-radius:999px}
+  nav a:hover{background:hsl(var(--hover))}
+
+  .theme-toggle{display:inline-flex; align-items:center; gap:.45rem; padding:.38rem .6rem; border:1px solid hsl(var(--line)); border-radius:999px; background:hsl(var(--card)); cursor:pointer}
+  .theme-toggle svg{width:16px;height:16px}
+  .theme-toggle .moon{display:none}
+  :root[data-theme="dark"] .theme-toggle .sun{display:none}
+  :root[data-theme="dark"] .theme-toggle .moon{display:inline}
+
+  main{padding-bottom:2rem}
+  section{scroll-margin-top:90px; margin: 1rem 0 2rem}
+  h2{margin:.2rem 0 0; font-size: clamp(1.2rem, 2.8vw, 1.6rem)}
+  h3{margin:0 0 .8rem; font-size: clamp(1.05rem, 2.6vw, 1.3rem); display:flex; gap:.6rem; align-items:center}
+  h4{margin:1rem 0 .45rem; font-size:1.05rem; color:hsl(var(--muted))}
+  p{margin:.35rem 0 .6rem}
+  ul{margin:.2rem 0 .8rem 1.1rem; line-height:1.6}
+  .grid{display:grid; gap:1rem}
+  @media (min-width: 880px){ .grid{grid-template-columns: 1fr 1fr} }
+
+  /* perfekt ausgerichtete Abschnitts-Icons */
+  .icon{flex:0 0 auto; display:inline-grid; place-items:center; width:28px; height:28px; border-radius:999px; background:linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2))); box-shadow:0 4px 10px hsl(210 30% 20% / .15)}
+  .icon svg{width:16px; height:16px; color:#fff}
+
+  .pill{display:inline-block;padding:.25rem .6rem;border-radius:999px;font-size:.8rem;border:1px solid hsl(var(--line));color:hsl(var(--muted)); background:hsl(var(--hover))}
+  .legend{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0}
+  .legend .ok{background:hsl(160 70% 35% / .18); color:hsl(160 70% 35%)}
+  .legend .warn{background:hsl(40 100% 45% / .18); color:hsl(40 100% 45%)}
+
+  footer{color:hsl(var(--muted)); text-align:center; padding:2rem 1rem 3rem}
+
+  .ranks{display:grid; gap:.8rem}
+  @media (min-width: 880px){ .ranks{grid-template-columns: repeat(2,1fr)} }
+  .rank-card{padding:1rem;border-radius:14px;border:1px solid hsl(var(--line));background:hsl(var(--card))}
+  .rank-title{display:flex;align-items:center;gap:.5rem;margin:0 0 .4rem;font-weight:600}
+  .tag{padding:.2rem .5rem;border-radius:999px;border:1px solid hsl(var(--line));font-size:.75rem;color:hsl(var(--txt)/.9); background:hsl(var(--hover))}
+
+  .figure{border-radius:14px;background:hsl(var(--hover));padding:.6rem;border:1px solid hsl(var(--line));box-shadow:0 6px 16px hsl(210 20% 10% / .06)}
+  .figure img{width:100%;height:auto;border-radius:10px;display:block}
+  .figure figcaption{font-size:.85rem;color:hsl(var(--muted));padding:.35rem .4rem}
+
+  /* Druck sauber */
+  @media print{body{background:#fff;color:#000} header{display:none} .card{background:#fff;border-color:#ddd;box-shadow:none}}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0 .2rem}
+  .chip{padding:.35rem .75rem;border-radius:999px;font-weight:700;letter-spacing:.2px;border:1px solid hsl(var(--line));background:linear-gradient(135deg, hsl(var(--brand) / .12), hsl(var(--brand-2) / .12));color:hsl(var(--txt))}
+  .chip.badge{background:linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)));color:#fff;border-color:transparent;box-shadow:0 6px 12px hsl(210 40% 20% / .18)}
+  .tagline{font-size:.95rem;color:hsl(var(--muted));margin-top:.1rem}
+.header-inner{column-gap:1.2rem;row-gap:.5rem;flex-wrap:wrap}
+  .header-left{display:flex;align-items:center;gap:.8rem}
+  .slogan-block{display:flex;flex-direction:column;gap:.35rem}
+  .header-titles{margin-left:clamp(1.25rem,3.5vw,2.5rem); padding-left:clamp(1.25rem,3.5vw,2.5rem); border-left:1px solid hsl(var(--line)); margin-top:.25rem}
+  @media (max-width: 720px){.header-titles{border-left:0;padding-left:0;margin-left:0;width:100%}.brand,.header-left{width:100%}}
+.slogan-primary{display:flex;flex-direction:column;gap:.1rem;font-weight:800;line-height:1.05;font-size:clamp(.9rem,1.6vw,1.05rem);letter-spacing:.2px}
+.slogan-primary .accent{color:hsl(var(--brand))}
+:root[data-theme="dark"] .slogan-primary .accent{color:hsl(var(--brand-2))}
+.slogan-secondary{margin-top:.25rem;font-size:.95rem;color:hsl(var(--muted));font-weight:600}
+.lock-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,hsl(var(--bg)/.9),hsl(var(--bg)/.96));backdrop-filter:blur(8px);z-index:999}
+.lock-card{max-width:460px;width:92%;background:hsl(var(--card));border:1px solid hsl(var(--line));border-radius:18px;box-shadow:0 18px 40px hsl(210 30% 10% / .25);padding:1.2rem}
+.lock-title{display:flex;align-items:center;gap:.6rem;margin:0 0 .6rem;font-weight:800;font-size:1.1rem}
+.lock-row{display:flex;gap:.5rem;align-items:center}
+.lock-input{flex:1;padding:.65rem .8rem;border-radius:10px;border:1px solid hsl(var(--line));background:hsl(var(--hover));color:hsl(var(--txt))}
+.lock-btn{padding:.65rem .9rem;border-radius:10px;border:1px solid hsl(var(--line));background:linear-gradient(135deg,hsl(var(--brand)),hsl(var(--brand-2)));color:#fff;cursor:pointer}
+.lock-msg{margin-top:.5rem;color:crimson;min-height:1.2em;font-size:.9rem}
+body.locked header, body.locked main, body.locked footer {display:none}
+.quick-grid{display:grid;gap:.8rem}
+  @media (min-width: 880px){.quick-grid{grid-template-columns:repeat(2,1fr)}}
+  .quick-item{padding:.8rem;border:1px solid hsl(var(--line));border-radius:12px;background:hsl(var(--card))}
+  .k-badge{display:inline-block;font-weight:800;font-size:.78rem;padding:.2rem .6rem;border-radius:999px;color:#fff;background:linear-gradient(135deg,hsl(var(--brand)),hsl(var(--brand-2)));margin-bottom:.4rem}
+  .fold summary{list-style:none;cursor:pointer}
+  .fold summary::-webkit-details-marker{display:none}
+  .fold summary h4{display:inline}
+  .fab{position:fixed;right:1rem;bottom:1rem;border-radius:999px;padding:.7rem .9rem;border:1px solid hsl(var(--line));background:linear-gradient(135deg,hsl(var(--brand)),hsl(var(--brand-2)));color:#fff;box-shadow:0 10px 24px hsl(210 40% 10% / .25);display:none}
+  .fab.show{display:inline-flex}
+.legal-note{margin-top:.4rem;font-size:.9rem;color:hsl(var(--muted));letter-spacing:.2px}
+</style>
+  <!-- ASSETS (GitHub):
+       Lege die Dateien in den Ordner /assets deiner Repo.
+       Pflicht-Dateinamen:
+       1) /assets/rkm-logo.png         (Logo oben links im Header)
+       2) /assets/abcde-schema.png     (Grafik im ABCDE-Abschnitt)
+       Optional:
+       3) /assets/favicon.png          (Favicon – falls gewünscht, <link rel=\"icon\"> ergänzen)
+       Hinweis: Bei Updates im laufenden Betrieb ggf. Cache-Busting nutzen, z.B. rkm-logo.png?v=1.
+  -->
+</head>
+<body>
+  <header>
+    <div class="header-inner container">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <!-- RKM-Logo eingebettet -->
+          <img alt="Rettungs Klinik München – Logo" src="https://cdn.discordapp.com/attachments/1396509738484895935/1408153064556200058/RKM.png?ex=68b7dd7c&is=68b68bfc&hm=b722da4ac86c3bc7ac9995e08e6dbbca2892c0da169c13c22ee75e7f626b8f23&" referrerpolicy="no-referrer" />
+        </div>
+        <div class="slogan-block">
+            <div class="slogan-primary" aria-label="Slogan 1">
+              <span>Reagieren</span>
+              <span>Konzentrieren und sogar</span>
+              <span>Mobilisieren</span>
+              <span class="accent">Dein RKM</span>
+            </div>
+            <div class="slogan-secondary" aria-label="Slogan 2">Nah am Mensch stark im einsatz</div>
+          </div>
+          </div>
+      <div class="header-titles">
+        <h1 class="brand-headline">Rettungs Klinik München</h1>
+        <div class="subtitle">Dienstordnung &amp; Abläufe – Mitarbeitende</div>
+        <small style="color:hsl(var(--muted))">FiveM Midcore • Patientenankündigung ausschließlich über den <strong>Krankenhausmonitor</strong></small>
+      </div>
+      <nav aria-label="Navigation">
+      <a href="#dienst">Dienstvorschriften</a>
+      <a href="#quick">Schnellüberblick</a>
+      <a href="#freigaben">Freigaben je Rang</a>
+      <a href="#notstand">Notstand</a>
+      <a href="#standard">Standardabläufe</a>
+      <a href="#abcde">ABCDE</a>
+      <button class="theme-toggle" type="button" aria-label="Darstellung umschalten">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span>Theme</span>
+      </button></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Intro / Hero -->
+    <section class="card" id="intro">
+      <h2>Was ihr wissen müsst</h2>
+      <div class="chips" aria-label="Leitmotiv">
+        <span class="chip">Reagieren</span>
+        <span class="chip">Konzentrieren und sogar</span>
+        <span class="chip">Mobilisieren</span>
+        <span class="chip badge">Dein RKM</span>
+      </div>
+      <ul>
+        <li><strong>Monitor first:</strong> Patient:innen werden ausschließlich über den <strong>Krankenhausmonitor</strong> angekündigt (Alter ≈, <em>bisher gemacht</em>, <em>noch benötigt</em>).</li>
+        <li><strong>Vitals im RP:</strong> Wir nennen und dokumentieren <em>Puls</em> & <em>Blutdruck</em>. Das <strong>ABCDE</strong>-Schema bleibt unverändert.</li>
+        <li><strong>Befugnisse & Loadouts</strong> richten sich nach eurer Freigabeliste. Details unten.</li>
+      </ul>
+    </section>
+
+    <!-- Schnellüberblick -->
+    <section class="card" id="quick" aria-labelledby="quick-title">
+      <h3 id="quick-title">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </span>
+        Schnellüberblick
+      </h3>
+      <div class="quick-grid">
+        <div class="quick-item">
+          <div class="k-badge">Monitor</div>
+          <ul>
+            <li>Patient:innen ausschl. über <strong>Krankenhausmonitor</strong> ankündigen (Alter ≈, <em>bisher gemacht</em>, <em>noch benötigt</em>).</li>
+            <li>Leitung im Normalbetrieb: ranghöchste/r anwesende/r Arzt/Ärztin.</li>
+          </ul>
+        </div>
+        <div class="quick-item">
+          <div class="k-badge">Rollen</div>
+          <ul>
+            <li>Aufnahme • Vitalwerte/IV • Blutung/Flüssigkeit • Schmerz/Koordination • ärztliche Entscheidung.</li>
+            <li>Vitals immer laut: <strong>Puls → Blutdruck</strong>.</li>
+          </ul>
+        </div>
+        <div class="quick-item">
+          <div class="k-badge">Triage</div>
+          <ul>
+            <li><strong>ROT</strong> sofort • <strong>GELB</strong> dringlich/stabil • <strong>GRÜN</strong> wartet • <strong>SCHWARZ</strong> nur Arzt.</li>
+            <li><strong>ABCDE</strong> strikt abarbeiten, regelmäßig reevaluieren.</li>
+          </ul>
+        </div>
+        <div class="quick-item">
+          <div class="k-badge">Entlassung</div>
+          <div class="legend">
+            <span class="pill ok">Puls 70–90 bpm</span>
+            <span class="pill ok">RR 100/70–140/94</span>
+            <span class="pill warn">Richtwerte ≈ 80 bpm · 120/80</span>
+          </div>
+          <ul>
+            <li>Entlassung nur bei stabilen Werten & keiner akuten Gefahr; Entscheidung durch Arzt/Ärztin.</li>
+          </ul></div></div></section>
+
+    <!-- 1) Dienstvorschriften -->
+    <section class="card" id="dienst">
+      <h3>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 3h6v4H9z"/></svg>
+        </span>
+        1) Dienstvorschriften – kurz & klar
+      </h3>
+
+      <div class="grid">
+        <div>
+          <h4>Meldewege & Zuständigkeiten</h4>
+          <ul>
+            <li><strong>Dienstbeginn/-ende:</strong> per Funk bei <strong>Leitstelle</strong> oder <strong>Klinikleitung</strong> melden.</li>
+            <li><strong>Patientenankündigungen:</strong> ausschließlich über den <strong>Krankenhausmonitor</strong>.</li>
+            <li><strong>Leitung Normalbetrieb:</strong> ranghöchste/r anwesende/r Arzt/Ärztin (AA/FA/OA/Klinikleitung).</li>
+          </ul>
+
+          <h4>Teamkommunikation & Verhalten</h4>
+          <ul>
+            <li>Ansagen <strong>kurz, klar, respektvoll</strong>. Vitalwerte immer laut (Puls → Blutdruck).</li>
+            <li>Vor Aufnahme <strong>Rollen klären</strong>: Aufnahme • Vitalwerte/IV • Blutung/Flüssigkeit • Schmerz/Koordination • ärztliche Entscheidung.</li>
+            <li>Schockraum- & Transportwege <strong>frei halten</strong>; keine OOC-Diskussionen im Behandlungsbereich.</li>
+            <li>Befugnisse strikt nach Freigabeliste (Grafiken). Beispiele: KP gibt <em>Epinephrin/Novalgin</em> nur nach Fortbildung; <em>Leichensack</em> nur nach ärztlicher Freigabe.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Übergabe an die Klinik (zusätzlich zum Monitor)</h4>
+          <ul>
+            <li><strong>Patient:in</strong> (Name, Alter ≈), <strong>Unfallhergang</strong>, <strong>Verletzungsmuster</strong> (z. B. Brustkorb/Kopf).</li>
+            <li><strong>Vitalwerte</strong>: Puls & RR (mmHg).</li>
+            <li><strong>Bisherige Maßnahmen</strong> am Einsatzort.</li>
+            <li><strong>Wer war die höchstrangige Person</strong> am Einsatzort?</li>
+          </ul>
+
+          <h4>Entlassung – Richtwerte</h4>
+          <div class="legend">
+            <span class="pill ok">Puls: Ziel 70–90 bpm (≈ 80)</span>
+            <span class="pill ok">RR: 100/70–140/94 (≈ 120/80)</span>
+          </div>
+          <ul>
+            <li>Entlassung bei stabilen Werten & keiner akuten Gefahr. <em>Auf Wunsch</em> früher möglich, wenn vertretbar.</li>
+            <li>Endentscheidung trifft die/der anwesende Arzt/Ärztin.</li>
+          </ul>
+
+          <h4>Disziplin</h4>
+          <ul>
+            <li>Missachtung von Befugnissen/Anweisungen → Maßnahmen der Klinikleitung (z. B. temporärer Entzug RKM-Quali, Nachprüfung; Sanktionskatalog).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1b) Freigaben je Rang -->
+    <section class="card" id="freigaben">
+      <h3>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>
+        </span>
+        1b) Freigaben & Equipment je Rang
+      </h3>
+      <p><em>Grundsatz:</em> Equipment und Befugnisse bauen aufeinander auf. <strong>Vorheriger Rang gilt zusätzlich</strong>. Medizinische Maßnahmen nur innerhalb eurer Freigaben/Schulungen.</p>
+      <div class="ranks">
+        <div class="rank-card">
+          <p class="rank-title"><span class="tag">@Azubi // KPiA</span></p>
+          <ul>
+            <li>EKG, Defibrillator</li>
+            <li>IV-Zugang</li>
+            <li>Verbandsmaterial (Päckchen, elastische/Israeli-Bandage)</li>
+            <li>Stifneck, Tourniquet</li>
+            <li>Kochsalzlösungen (NaCl)</li>
+          </ul>
+        </div>
+        <div class="rank-card">
+          <p class="rank-title"><span class="tag">@RS // KP</span></p>
+          <ul>
+            <li>QuickClot, Ringer-Lactat</li>
+            <li>Epinephrin <em>(nur nach Fortbildung)</em></li>
+            <li>Novalgin <em>(nur nach Fortbildung)</em></li>
+            <li>Leichensack <em>(nur nach expliziter NA/FA-Exitusfreigabe)</em></li>
+          </ul>
+        </div>
+        <div class="rank-card">
+          <p class="rank-title"><span class="tag">@NFS // MFA</span></p>
+          <ul>
+            <li>Taser <em>(Ausgabe nach Ausbildung)</em></li>
+            <li>Morphin</li>
+            <li>Leichensack <em>(nur mit Freigabe NA/FA)</em></li>
+          </ul>
+        </div>
+        <div class="rank-card">
+          <p class="rank-title"><span class="tag">@NA // FA</span></p>
+          <ul>
+            <li>Bluttransfusion</li>
+            <li>Fentanyl, Propofol</li>
+            <li>LUCAS 3 <em>(nach Freigabe)</em></li>
+            <li>Not-OPs</li>
+          </ul>
+        </div>
+        <div class="rank-card">
+          <p class="rank-title"><span class="tag">@LNA // OA</span></p>
+          <ul>
+            <li>Kann MANV-Lagen übernehmen/führen</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:.8rem"><strong>Verstöße</strong> können zum temporären Entzug der RKM-Qualifikation und zu einer verpflichtenden Nachprüfung führen. Zusätzlich gelten Sanktionen gemäß Sanktionskatalog.</p>
+    </section>
+
+    <!-- 2) Notstand -->
+    <section class="card" id="notstand">
+      <h3>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 1.8 1.8 19.7A2 2 0 0 0 3.6 22h16.8a2 2 0 0 0 1.8-2.3L13.7 1.8a2 2 0 0 0-3.4 0z"/><path d="M12 8v5M12 17h.01"/></svg>
+        </span>
+        2) Notstand (kein Arzt im Haus / Überlastung)
+      </h3>
+
+      <div class="grid">
+        <div>
+          <h4>Auslöser & Führung</h4>
+          <ul>
+            <li>Kein Arzt anwesend, deutliche Überlastung oder relevante Ressourcenknappheit.</li>
+            <li><strong>MFA</strong> übernimmt die medizinische Leitung (bei Mehrzahl: dienstälteste/r MFA).</li>
+          </ul>
+
+          <h4>Vorgehen – Schritt für Schritt</h4>
+          <ul>
+            <li>Notstand über Funk melden und Leitung benennen.</li>
+            <li>Krankenhausmonitor prüfen, <strong>Behandlungsplätze priorisieren</strong> (kritisch → Schockraum).</li>
+            <li><strong>Sichtung/Triage</strong>: <strong>ROT</strong> (sofort) • <strong>GELB</strong> (dringlich/stabil) • <strong>GRÜN</strong> (wartet) • <strong>SCHWARZ</strong> (Todesfeststellung nur durch Arzt).</li>
+            <li><strong>ABCDE</strong> Schema unverändert, strukturiert abarbeiten.</li>
+            <li><strong>Aufgaben je Rang</strong>: KPiA (Vitals/IV/NaCl/Verbände) • KP (Flüssigkeit/Blutung; Med nur gem. Fortbildung) • MFA (Schmerz/Koordination, Nachforderung).</li>
+            <li><strong>Grenzen</strong>: keine OP, keine Bluttransfusion, keine Narkose/Propofol/Fentanyl, keine Todesfeststellung ohne Arzt.</li>
+            <li>Regelmäßig <strong>reevaluieren</strong> – v. a. ROT (Puls/RR, Wirkung der Maßnahmen).</li>
+            <li>Arzt trifft ein → kurze Lagemeldung und Übergabe.</li>
+          </ul>
+        </div>
+        <div>
+          <details class="fold"><summary><h4>Häufige Fehler vermeiden</h4></summary><ul>
+            <li>Alle arbeiten an einer Person → <strong>klare Zuweisungen</strong> pro Patient:in.</li>
+            <li>Fortbildungsgrenzen ignoriert → KP ohne Fortbildung gibt <em>kein</em> Epinephrin/Novalgin.</li>
+            <li>Monitor wird nicht genutzt → <strong>laufend</strong> neue Ankündigungen/Bedarfe prüfen.</li>
+          </ul></details><details class="fold"><summary><h4>Merksatz</h4></summary><ul>
+            <li><strong>Stabilisieren vor Spezialmaßnahmen</strong>: Flüssigkeit, Blutung, Schmerz – danach ärztliche Entscheidung.</li>
+          </ul></details></div></div></section>
+
+    <!-- 3) Standardabläufe -->
+    <section class="card" id="standard">
+      <h3>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M6 15a9 9 0 0 0 9 6h1a2 2 0 0 0 2-2V3"/><path d="M10 5h8"/><path d="M10 9h8"/></svg>
+        </span>
+        3) Standardabläufe (Arzt/Ärztin anwesend)
+      </h3>
+
+      <div class="grid">
+        <div>
+          <h4>Vorbereitung</h4>
+          <ul>
+            <li>Monitor regelmäßig prüfen; Bedarf intern kurz ansagen (z. B. „Schmerzmittel“, „OP benötigt“, „Flüssigkeit“).</li>
+            <li>Rollen festlegen: Aufnahme • Vitalwerte/IV • Blutung/Flüssigkeit • Schmerz/Koordination • ärztliche Entscheidung.</li>
+          </ul>
+
+          <h4>Aufnahme & Erstversorgung</h4>
+          <ul>
+            <li>Übernahme am Behandlungsplatz/Schockraum.</li>
+            <li><strong>ABCDE</strong> strikt abarbeiten.</li>
+            <li>Vitalwerte sofort nennen: <strong>Puls</strong> & <strong>Blutdruck</strong>.</li>
+            <li>Zugang/Flüssigkeit: KPiA legt IV + NaCl; KP ergänzt Ringer/QuickClot nach Bedarf/Freigabe.</li>
+            <li>Schmerztherapie: MFA nach Indikation/Ansage.</li>
+            <li>Ärztliche Entscheidung: OP / Intensiv / Station / Entlassung.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Typische Pfade & Abschluss</h4>
+          <ul>
+            <li><strong>Kritisch (ROT):</strong> rasche Stabilisierung (IV, Flüssigkeit, Blutungsstillung) → ärztliche Entscheidung OP/Intensiv.</li>
+            <li><strong>Schwer, stabil (GELB):</strong> Stabilisierung + Schmerztherapie → Diagnostik/Station.</li>
+            <li><strong>Leicht (GRÜN):</strong> Wundversorgung, kurze Beobachtung → Entlassungsprüfung.</li>
+          </ul>
+          <h4>Entlassung</h4>
+          <div class="legend">
+            <span class="pill ok">Puls 70–90 bpm</span>
+            <span class="pill ok">RR 100/70–140/94 mmHg</span>
+            <span class="pill warn">Richtwerte ~80 bpm · 120/80</span>
+          </div>
+          <ul>
+            <li>Bei Stabilität & keiner akuten Gefahr; auf Wunsch früher, wenn medizinisch vertretbar. Entscheidung durch Arzt/Ärztin.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) ABCDE Grafik -->
+    <section class="card" id="abcde">
+      <h3>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 3v12"/><path d="M6 15a9 9 0 0 0 9 6h1a2 2 0 0 0 2-2V3"/><path d="M10 5h8"/><path d="M10 9h8"/>
+          </svg>
+        </span>
+        4) ABCDE – euer roter Faden
+      </h3>
+      <figure class="figure">
+        <img src="https://cdn.discordapp.com/attachments/1406352884353990806/1408490112760938586/ABCDE_Schema.png?ex=68b7c5e3&is=68b67463&hm=cc3d41423aa2e83a110695d2d89f1e13bedb48c85268575d3068a1d6d206a39f&" referrerpolicy="no-referrer" alt="ABCDE-Schema: Atemwege, Belüftung, Kreislauf, Defizit neurologisch, Entkleiden & Wärmeerhalt – inklusive Merksätzen und Beispielen." />
+        <figcaption>Entscheidung treffen und regelmäßig <strong>wiederbeurteilen</strong>. Quelle: internes Schulungsmaterial.</figcaption>
+      </figure>
+    </section>
+
+    <footer>
+      <p>Hinweis: Befugnisse gemäß euren Grafiken/Schulungen. <strong>Monitor first</strong>. ABCDE unverändert.</p>
+      <p class="legal-note">Nur für ausgewählte Personen. Interner Zugriff.</p>
+    </footer>
+    
+    <!-- Impressum (Platzhalter, bitte ausfüllen) -->
+      <button id="toTop" class="fab" type="button" aria-label="Nach oben">↑</button>
+  </main>
+
+<script>
+  // Theme + Nav + Scroll-to-top (ohne Passwort)
+  (function(){
+    const KEY_THEME = 'rkm-theme';
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem(KEY_THEME) || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.setAttribute('data-theme', savedTheme);
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      // Theme toggle
+      const tbtn = document.querySelector('.theme-toggle');
+      if(tbtn){ tbtn.addEventListener('click', ()=>{ const next = root.getAttribute('data-theme')==='dark' ? 'light':'dark'; root.setAttribute('data-theme', next); localStorage.setItem(KEY_THEME, next); }); }
+
+      // Smooth scroll + active nav highlight
+      const links=[...document.querySelectorAll('nav a[href^="#"]')];
+      links.forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); const el=document.querySelector(a.getAttribute('href')); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }));
+      const io=new IntersectionObserver(es=>{ es.forEach(e=>{ const id='#'+e.target.id; const l=document.querySelector(`nav a[href="${id}"]`); if(l && e.isIntersecting){ links.forEach(x=>x.style.background=''); l.style.background='hsl(var(--hover))'; } }); },{rootMargin:'-45% 0px -50% 0px',threshold:.01});
+      document.querySelectorAll('main section').forEach(s=>io.observe(s));
+
+      // Back to top
+      const toTop = document.getElementById('toTop');
+      const onScroll = ()=>{ if(window.scrollY>600){ toTop.classList.add('show'); } else { toTop.classList.remove('show'); } };
+      window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+      toTop && toTop.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+    });
+  })();
+</script>
+</body>
+</html>
